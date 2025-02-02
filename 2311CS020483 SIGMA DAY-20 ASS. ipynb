@@ -1,0 +1,793 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "71236dfd-c896-4498-9dce-1a5466baec28",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Order_ID</th>\n",
+       "      <th>Product_Category</th>\n",
+       "      <th>Product_Price</th>\n",
+       "      <th>Customer_Age</th>\n",
+       "      <th>Rating</th>\n",
+       "      <th>Review_Text</th>\n",
+       "      <th>Order_Date</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>Clothing</td>\n",
+       "      <td>3262.0</td>\n",
+       "      <td>58.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>Would not recommend</td>\n",
+       "      <td>2023-01-01</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>Clothing</td>\n",
+       "      <td>214.0</td>\n",
+       "      <td>20.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>Excellent product!</td>\n",
+       "      <td>2023-01-02</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>Home Decor</td>\n",
+       "      <td>3429.0</td>\n",
+       "      <td>51.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>Value for money</td>\n",
+       "      <td>2023-01-03</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>Books</td>\n",
+       "      <td>4568.0</td>\n",
+       "      <td>35.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>Value for money</td>\n",
+       "      <td>2023-01-04</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5</td>\n",
+       "      <td>Electronics</td>\n",
+       "      <td>2237.0</td>\n",
+       "      <td>32.0</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>Not as expected</td>\n",
+       "      <td>2023-01-05</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>500</th>\n",
+       "      <td>46</td>\n",
+       "      <td>Home Decor</td>\n",
+       "      <td>2965.0</td>\n",
+       "      <td>41.0</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>Not as expected</td>\n",
+       "      <td>2023-02-15</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>501</th>\n",
+       "      <td>109</td>\n",
+       "      <td>Home Decor</td>\n",
+       "      <td>384.0</td>\n",
+       "      <td>56.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>Excellent product!</td>\n",
+       "      <td>2023-04-19</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>502</th>\n",
+       "      <td>52</td>\n",
+       "      <td>Electronics</td>\n",
+       "      <td>2434.0</td>\n",
+       "      <td>26.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>Value for money</td>\n",
+       "      <td>2023-02-21</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>503</th>\n",
+       "      <td>281</td>\n",
+       "      <td>Home Decor</td>\n",
+       "      <td>3093.0</td>\n",
+       "      <td>24.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>2023-10-08</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>504</th>\n",
+       "      <td>461</td>\n",
+       "      <td>Electronics</td>\n",
+       "      <td>1970.0</td>\n",
+       "      <td>55.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>Fast delivery</td>\n",
+       "      <td>2024-04-05</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>505 rows × 7 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "     Order_ID Product_Category  Product_Price  Customer_Age  Rating  \\\n",
+       "0           1         Clothing         3262.0          58.0     3.0   \n",
+       "1           2         Clothing          214.0          20.0     3.0   \n",
+       "2           3       Home Decor         3429.0          51.0     2.0   \n",
+       "3           4            Books         4568.0          35.0     3.0   \n",
+       "4           5      Electronics         2237.0          32.0     4.0   \n",
+       "..        ...              ...            ...           ...     ...   \n",
+       "500        46       Home Decor         2965.0          41.0     4.0   \n",
+       "501       109       Home Decor          384.0          56.0     1.0   \n",
+       "502        52      Electronics         2434.0          26.0     3.0   \n",
+       "503       281       Home Decor         3093.0          24.0     3.0   \n",
+       "504       461      Electronics         1970.0          55.0     1.0   \n",
+       "\n",
+       "             Review_Text  Order_Date  \n",
+       "0    Would not recommend  2023-01-01  \n",
+       "1     Excellent product!  2023-01-02  \n",
+       "2        Value for money  2023-01-03  \n",
+       "3        Value for money  2023-01-04  \n",
+       "4        Not as expected  2023-01-05  \n",
+       "..                   ...         ...  \n",
+       "500      Not as expected  2023-02-15  \n",
+       "501   Excellent product!  2023-04-19  \n",
+       "502      Value for money  2023-02-21  \n",
+       "503                  NaN  2023-10-08  \n",
+       "504        Fast delivery  2024-04-05  \n",
+       "\n",
+       "[505 rows x 7 columns]"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "from textblob import TextBlob\n",
+    "import seaborn as sns\n",
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "# Load the dataset\n",
+    "df = pd.read_csv(\"Day 20_E-Commerce_Data.csv\")  # Replace with actual filename\n",
+    "df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "c4267472-d904-446d-b514-460709081165",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Order_ID             0\n",
+      "Product_Category    24\n",
+      "Product_Price       20\n",
+      "Customer_Age        15\n",
+      "Rating              25\n",
+      "Review_Text         21\n",
+      "Order_Date          10\n",
+      "dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df.isna().sum())  # Check missing values in each column\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "2ea81c42-c142-42eb-af2f-759591bf40a6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df['Rating'] = df['Rating'].fillna(df['Rating'].median())  # Median for ordinal data\n",
+    "df['Customer_Age'] = df['Customer_Age'].fillna(df['Customer_Age'].mean())  # Mean for age\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "97f4938b-8bb6-42f4-b23d-50bd440aba15",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0      58.0\n",
+       "1      20.0\n",
+       "2      51.0\n",
+       "3      35.0\n",
+       "4      32.0\n",
+       "       ... \n",
+       "500    41.0\n",
+       "501    56.0\n",
+       "502    26.0\n",
+       "503    24.0\n",
+       "504    55.0\n",
+       "Name: Customer_Age, Length: 505, dtype: float64"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df['Customer_Age']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "e10adc9b-786f-4542-bfc0-df47fc3d2d3f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0      3.0\n",
+       "1      3.0\n",
+       "2      2.0\n",
+       "3      3.0\n",
+       "4      4.0\n",
+       "      ... \n",
+       "500    4.0\n",
+       "501    1.0\n",
+       "502    3.0\n",
+       "503    3.0\n",
+       "504    1.0\n",
+       "Name: Rating, Length: 505, dtype: float64"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df['Rating']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "a16d36d7-95b2-4554-bb48-4870ee6aa7e6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def correct_spelling(text):\n",
+    "    if pd.isna(text) or not isinstance(text, str):\n",
+    "        return np.nan  # Keep NaN if text is missing\n",
+    "    return str(TextBlob(text).correct())\n",
+    "\n",
+    "df['Review_Text'] = df['Review_Text'].apply(correct_spelling)  # Apply spelling correction\n",
+    "df['Review_Text'] = df['Review_Text'].fillna(\"No review provided\")  # Fill remaining NaNs\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "1ff519e1-6325-4331-8248-9a1db8d02951",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Number of duplicate reviews: 505\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Identify duplicates\n",
+    "duplicates = df[df.duplicated(subset=['Review_Text'], keep=False)]\n",
+    "print(f\"Number of duplicate reviews: {len(duplicates)}\")\n",
+    "\n",
+    "# Drop exact duplicates\n",
+    "df = df.drop_duplicates(subset=['Review_Text'], keep='first')\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "2d587e81-7950-4e52-a964-9cf7789a190b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df.loc[:, 'Rating'] = df['Rating'].clip(1, 5)  # Ensures modification on the actual DataFrame\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "e1569ee0-82bb-454c-8378-27df0f8f26f1",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Order_ID</th>\n",
+       "      <th>Product_Category</th>\n",
+       "      <th>Product_Price</th>\n",
+       "      <th>Customer_Age</th>\n",
+       "      <th>Rating</th>\n",
+       "      <th>Review_Text</th>\n",
+       "      <th>Order_Date</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>Clothing</td>\n",
+       "      <td>3262.0</td>\n",
+       "      <td>58.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>Would not recommend</td>\n",
+       "      <td>2023-01-01</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>Clothing</td>\n",
+       "      <td>214.0</td>\n",
+       "      <td>20.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>Excellent product!</td>\n",
+       "      <td>2023-01-02</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>Home Decor</td>\n",
+       "      <td>3429.0</td>\n",
+       "      <td>51.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>Value for money</td>\n",
+       "      <td>2023-01-03</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5</td>\n",
+       "      <td>Electronics</td>\n",
+       "      <td>2237.0</td>\n",
+       "      <td>32.0</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>Not as expected</td>\n",
+       "      <td>2023-01-05</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>6</td>\n",
+       "      <td>Beauty</td>\n",
+       "      <td>4952.0</td>\n",
+       "      <td>42.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>Last delivery</td>\n",
+       "      <td>2023-01-06</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>55</th>\n",
+       "      <td>56</td>\n",
+       "      <td>Electronics</td>\n",
+       "      <td>330.0</td>\n",
+       "      <td>19.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>No review provided</td>\n",
+       "      <td>2023-02-25</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    Order_ID Product_Category  Product_Price  Customer_Age  Rating  \\\n",
+       "0          1         Clothing         3262.0          58.0     3.0   \n",
+       "1          2         Clothing          214.0          20.0     3.0   \n",
+       "2          3       Home Decor         3429.0          51.0     2.0   \n",
+       "4          5      Electronics         2237.0          32.0     4.0   \n",
+       "5          6           Beauty         4952.0          42.0     1.0   \n",
+       "55        56      Electronics          330.0          19.0     3.0   \n",
+       "\n",
+       "            Review_Text  Order_Date  \n",
+       "0   Would not recommend  2023-01-01  \n",
+       "1    Excellent product!  2023-01-02  \n",
+       "2       Value for money  2023-01-03  \n",
+       "4       Not as expected  2023-01-05  \n",
+       "5         Last delivery  2023-01-06  \n",
+       "55   No review provided  2023-02-25  "
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "4562661f-27fd-4e46-ac44-d694ec69a073",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df.loc[:, 'Product_Category'] = df['Product_Category'].apply(lambda x: str(TextBlob(str(x)).correct()))\n",
+    "df.loc[:, 'Product_Category'] = df['Product_Category'].str.strip().str.title()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "5c23f520-d298-4300-9092-a0d4bdd90bf9",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0        Clothing\n",
+       "1        Clothing\n",
+       "2     Some Record\n",
+       "4     Electronics\n",
+       "5          Beauty\n",
+       "55    Electronics\n",
+       "Name: Product_Category, dtype: object"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.loc[:, 'Product_Category']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "34d41993-d099-40ad-b060-1632b7dd97d5",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAx8AAAHUCAYAAABbFJX7AAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjkuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8hTgPZAAAACXBIWXMAAA9hAAAPYQGoP6dpAAAo4klEQVR4nO3deZzVdb348feBWcBhGERhYBQHUHEDNHHDTCBMzaU9WxAhspsoXrXVtF+A4pKWttzE203oWleNwog0S9ywEsVULiouqSyWMCrKIsg2fH5/9JhzHRaBYfyM4PP5eMyjzvd8znc+38NHzrw43/OdQkopBQAAwDusVUtPAAAAeG8QHwAAQBbiAwAAyEJ8AAAAWYgPAAAgC/EBAABkIT4AAIAsxAcAAJCF+AAAALIQH8AO4+c//3kUCoVGX506dYqBAwfGbbfd1tLTK+revXsMHz58mx+3cuXKGDNmTNx3333NPqd58+bFySefHB07doxCoRDnn3/+Zsd279690XPcrl27OPLII+PGG29s9nltypgxY6JQKLxj+58zZ06MGTMm5s2bt1XjN1x3JSUlseeee8YXvvCF+Oc//7lV+xg+fHh079696ZMG2EmID2CHM3HixJgxY0Y88MAD8dOf/jRat24dp556avz+979v6altl5UrV8bYsWPfkfi44IIL4qGHHooJEybEjBkz4oILLnjb8e9///tjxowZMWPGjOIP38OGDYvx48c3+9xymzNnTowdO3ar46NBw7qbNm1afOlLX4qbb745PvCBD8SKFSu2+Nj/9//+X/z2t79t4owBdh4lLT0BgG3Vu3fvOOyww4q3TzzxxNh1113j5ptvjlNPPbUFZ/bu9cQTT8QRRxwRH/vYx7ZqfIcOHeKoo44q3j7uuOOitrY2rrnmmhg5cuQmH1NfXx/r1q2L8vLy5pjyu85b192gQYOivr4+Lr300pgyZUoMGTJkk49ZuXJl7LLLLrH33nvnnCrAu5Z3PoAdXps2baKsrCxKS0sbbX/ttdfi7LPPjj322CPKysqiZ8+ecfHFF8fq1asjImLVqlXxvve9L/bZZ59YunRp8XGLFi2KLl26xMCBA6O+vj4i/nXaTLt27eLJJ5+MwYMHR0VFRXTq1ClGjRoVK1eu3OIcFyxYEKeffnp07tw5ysvL44ADDojvf//7sX79+oj412lRnTp1ioiIsWPHFk/x2dLpW1va73333ReFQiGee+65uOOOO4r73dZ/9e/QoUPst99+MX/+/OJ8C4VCXHXVVTFu3Ljo0aNHlJeXx7333hsREVOnTo3+/fvHLrvsEpWVlfGhD30oZsyYsdF+b7/99jjkkEOivLw8evToEd/73vc2GtPwvX7+859vdF+hUIgxY8Y02vb000/H5z73uaiuro7y8vLYa6+94owzzojVq1fHz3/+8/j0pz8dEf8KiIbnY1P73pKGOGt4ThrWyOOPPx7HH398VFZWxuDBg4v3bXja1fr16+PHP/5xHHLIIdG2bdti8E2dOrXRuF/96lfRv3//qKioiHbt2sUJJ5wQjz32WKMxL7zwQnz2s5+NmpqaKC8vj+rq6hg8eHDMmjVrm48L4J3knQ9gh9PwL+wppairq4urr746VqxYEZ///OeLY1atWhWDBg2K559/PsaOHRt9+/aNP//5z3HFFVfErFmz4vbbb482bdrEpEmTol+/fjFixIiYPHlyrF+/PoYMGRIppbj55pujdevWxX2uXbs2TjrppPjyl78cF154YTzwwAMxbty4mD9//tue8vXKK6/E0UcfHWvWrIlLL700unfvHrfddlt87Wtfi+effz6uu+666Nq1a/zxj3+ME088Mb74xS/GmWeeGRFRDJKm7vfQQw+NGTNmxMc//vHYe++9iz/cd+3adZue87Vr18b8+fM3ms+PfvSj6NWrV3zve9+L9u3bx7777hs33XRTDBkyJI4//vi4+eabY/Xq1XHVVVfFwIED4+67745jjjkmIiLuvvvu+OhHPxr9+/ePW265Jerr6+Oqq66Kurq6bZrbW/3v//5vHHPMMbH77rvHJZdcEvvuu28sXLgwpk6dGmvWrImTTz45Lr/88rjoooviJz/5SRx66KEREU16Z+K5556LiMZ/RmvWrImPfOQjxTWybt26zT5++PDh8ctf/jK++MUvxiWXXBJlZWXx6KOPNgrDyy+/PL797W/HF77whfj2t78da9asiauvvjo+8IEPxMyZM+PAAw+MiIiTTjqp+Pzttdde8eqrr8YDDzwQS5Ys2ebjAnhHJYAdxMSJE1NEbPRVXl6errvuukZjr7/++hQRadKkSY22f/e7300Rke68887itl/96lcpItIPfvCD9J3vfCe1atWq0f0ppTRs2LAUEemHP/xho+2XXXZZioj0l7/8pbittrY2DRs2rHj7wgsvTBGRHnrooUaPHTlyZCoUCumZZ55JKaX0yiuvpIhIo0eP3qrnY2v32zCnk08+eav2W1tbm0466aS0du3atHbt2jR37tzi8X/9619PKaU0d+7cFBFp7733TmvWrCk+tr6+PtXU1KQ+ffqk+vr64vbly5enzp07p6OPPrq47cgjj0w1NTXpzTffLG5btmxZ6tixY3rry1PD95o4ceJGc93w+frgBz+YOnTokF5++eXNHt+vf/3rFBHp3nvv3arno2HdPfjgg2nt2rVp+fLl6bbbbkudOnVKlZWVadGiRSml/1sjEyZM2Ggfw4YNS7W1tcXb999/f4qIdPHFF2/2+y5YsCCVlJSkc889t9H25cuXpy5duqTTTjstpZTSq6++Wly/AO92TrsCdjg33nhjPPzww/Hwww/HHXfcEcOGDYtzzjkn/uM//qM45p577omKior41Kc+1eixDacx3X333cVtp512WowcOTK+/vWvx7hx4+Kiiy6KD33oQ5v83hue29/wbkvD6Uabcs8998SBBx4YRxxxxEZzSSnFPffcs+WDzrjfiIg//OEPUVpaGqWlpdGjR4+YNGlSnHvuuTFu3LhG4z7ykY80Ot3tmWeeiZdeeimGDh0arVr930tMu3bt4pOf/GQ8+OCDsXLlylixYkU8/PDD8YlPfCLatGlTHFdZWdnkz+2sXLkypk+fHqeddtrbvmPUVEcddVSUlpZGZWVlnHLKKdGlS5e44447orq6utG4T37yk1vc1x133BEREeecc85mx/zpT3+KdevWxRlnnBHr1q0rfrVp0yYGDBhQvDBBx44dY++9946rr746rrnmmnjssceKp90BvNs47QrY4RxwwAEbfeB8/vz58Y1vfCNOP/306NChQyxevDi6dOmy0SVbO3fuHCUlJbF48eJG20eMGBHjx4+PsrKy+Pd///dNft+SkpLYbbfdGm3r0qVLRMRG+3urxYsXb/IyqzU1NVt87Nt5p/YbEXHMMcfEtddeG4VCofiB6bKyso3GbXj6VsP33NRpXTU1NbF+/fp4/fXXI6UU69evLz5/b7WpbVvj9ddfj/r6+thzzz2b9PgtufHGG+OAAw6IkpKSqK6u3uQx7rLLLtG+ffst7uuVV16J1q1bv+2xNpx+dvjhh2/y/oa4KxQKcffdd8cll1wSV111VXz1q1+Njh07xpAhQ+Kyyy6LysrKrTk8gCzEB7BT6Nu3b/zpT3+KZ599No444ojYbbfd4qGHHoqUUqMAefnll2PdunWx++67F7etWLEihg4dGr169Yq6uro488wz43e/+91G32PdunWxePHiRgGyaNGiiIiNouStdtttt1i4cOFG21966aWIiEZz2Rbv1H4jIqqqqhoF3uZsGHcNz8Pm5tWqVavYddddi38uDc/fW224reGdkYYLBTTYMK46duwYrVu3jn/84x9bnHdTbBi9m7K1v5+kU6dOUV9fH4sWLdrs528a/vx+85vfRG1t7dvur7a2Nm644YaIiHj22Wdj0qRJMWbMmFizZk1cf/31WzUngBycdgXsFBqu6tNwus3gwYPjjTfeiClTpjQa1/CL8hquQhQRcdZZZ8WCBQvi1ltvjRtuuCGmTp0a11577Sa/z//8z/80un3TTTdFRMTAgQM3O7fBgwfHnDlz4tFHH91oLoVCIQYNGhQRUbxE7Ztvvvk2R7rt+81pv/32iz322CNuuummSCkVt69YsSImT55cvAJWRUVFHHHEEXHrrbfGqlWriuOWL1++0Yf3q6uro02bNjF79uxG2zcMxLZt28aAAQPi17/+dbz66qubneO2Ps/vhA9/+MMREW/7e1NOOOGEKCkpieeffz4OO+ywTX5tSq9eveLb3/529OnTZ6O1AdDSvPMB7HCeeOKJ4lWEFi9eHLfeemtMmzYtPv7xj0ePHj0iIuKMM86In/zkJzFs2LCYN29e9OnTJ/7yl7/E5ZdfHieddFIcd9xxERHxs5/9LH75y1/GxIkT46CDDoqDDjooRo0aFd/85jfj/e9/f6PPU5SVlcX3v//9eOONN+Lwww8vXu3qwx/+cPEKTptywQUXxI033hgnn3xyXHLJJVFbWxu33357XHfddTFy5Mjo1atXRPzr8w61tbXxu9/9LgYPHhwdO3aM3XfffbO/GXtr95tTq1at4qqrroohQ4bEKaecEl/+8pdj9erVcfXVV8eSJUviyiuvLI699NJL48QTT4wPfehD8dWvfjXq6+vju9/9blRUVMRrr71WHFcoFOL000+PCRMmxN577x0HH3xwzJw5sxh+b3XNNdfEMcccE0ceeWRceOGFsc8++0RdXV1MnTo1/vM//zMqKyujd+/eERHx05/+NCorK6NNmzbRo0ePt333qrl94AMfiKFDh8a4ceOirq4uTjnllCgvL4/HHnssdtlllzj33HOje/fucckll8TFF18cL7zwQvH32dTV1cXMmTOjoqIixo4dG7Nnz45Ro0bFpz/96dh3332jrKws7rnnnpg9e3ZceOGF2Y4JYKu05KfdAbbFpq52VVVVlQ455JB0zTXXpFWrVjUav3jx4nTWWWelrl27ppKSklRbW5u+9a1vFcfNnj07tW3bttGVqVJKadWqValfv36pe/fu6fXXX08p/etqRRUVFWn27Nlp4MCBqW3btqljx45p5MiR6Y033mj0+A2vdpVSSvPnz0+f//zn02677ZZKS0vTfvvtl66++upGV4RKKaW77rorve9970vl5eUpIjbaz4a2dr/berWrLY1tuALV1Vdfvcn7p0yZko488sjUpk2bVFFRkQYPHpz++te/bjRu6tSpqW/fvqmsrCzttdde6corr0yjR49OG748LV26NJ155pmpuro6VVRUpFNPPTXNmzdvk1cHmzNnTvr0pz+ddtttt+J+hw8f3mh9/OAHP0g9evRIrVu33uyVtBo0rLuHH374bZ+ThjWyufveerWrlP51ZbBrr7029e7dO5WVlaWqqqrUv3//9Pvf/77RuClTpqRBgwal9u3bp/Ly8lRbW5s+9alPpbvuuiullFJdXV0aPnx42n///VNFRUVq165d6tu3b7r22mvTunXr3nbOALkVUnrL++IAbNLw4cPjN7/5TbzxxhstPRUA2GH5zAcAAJCF+AAAALJw2hUAAJCFdz4AAIAsxAcAAJCF+AAAALJo8i8ZXL9+fbz00ktRWVkZhUKhOecEAADsQFJKsXz58qipqYlWrTb//kaT4+Oll16Kbt26NfXhAADATubFF1+MPffcc7P3Nzk+Kisri9+gffv2Td0NAACwg1u2bFl069at2Aib0+T4aDjVqn379uIDAADY4scxfOAcAADIQnwAAABZiA8AACAL8QEAAGQhPgAAgCzEBwAAkIX4AAAAshAfAABAFuIDAADIQnwAAABZiA8AACAL8QEAAGQhPgAAgCzEBwAAkIX4AAAAshAfAABAFuIDAADIQnwAAABZiA8AACAL8QEAAGQhPgAAgCzEBwAAkIX4AAAAshAfAABAFuIDAADIQnwAAABZiA8AACAL8QEAAGQhPgAAgCzEBwAAkIX4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1NREoVCIKVOmNLo/pRRjxoyJmpqaaNu2bQwcODCefPLJRmNWr14d5557buy+++5RUVERH/nIR+If//hHozGvv/56DB06NKqqqqKqqiqGDh0aS5YseYePjtyuuOKKOPzww6OysjI6d+4cH/vYx+KZZ55pNMaaYluMHz8++vbtW/wFXP3794877rijeL/1xPa44oorolAoxPnnn1/cZk2xLcaMGROFQqHRV5cuXYr377DrKW2nW265JZWWlqb/+q//SnPmzEnnnXdeqqioSPPnz9/eXbOD+8Mf/pAuvvjiNHny5BQR6be//W2j+6+88spUWVmZJk+enB5//PH0mc98JnXt2jUtW7asOOass85Ke+yxR5o2bVp69NFH06BBg9LBBx+c1q1bVxxz4oknpt69e6cHHnggPfDAA6l3797plFNOyXWYZHLCCSekiRMnpieeeCLNmjUrnXzyyWmvvfZKb7zxRnGMNcW2mDp1arr99tvTM888k5555pl00UUXpdLS0vTEE0+klKwnmm7mzJmpe/fuqW/fvum8884rbrem2BajR49OBx10UFq4cGHx6+WXXy7ev6Oup+2OjyOOOCKdddZZjbbtv//+6cILL9zeXbMT2TA+1q9fn7p06ZKuvPLK4rZVq1alqqqqdP3116eUUlqyZEkqLS1Nt9xyS3HMP//5z9SqVav0xz/+MaWU0pw5c1JEpAcffLA4ZsaMGSki0tNPP/0OHxUt6eWXX04RkaZPn55SsqZoHrvuumv62c9+Zj3RZMuXL0/77rtvmjZtWhowYEAxPqwpttXo0aPTwQcfvMn7duT1tF2nXa1ZsyYeeeSROP744xttP/744+OBBx7Ynl2zk5s7d24sWrSo0dopLy+PAQMGFNfOI488EmvXrm00pqamJnr37l0cM2PGjKiqqoojjzyyOOaoo46Kqqoqa3Ant3Tp0oiI6NixY0RYU2yf+vr6uOWWW2LFihXRv39/64kmO+ecc+Lkk0+O4447rtF2a4qm+Pvf/x41NTXRo0eP+OxnPxsvvPBCROzY66lkex786quvRn19fVRXVzfaXl1dHYsWLdquibFza1gfm1o78+fPL44pKyuLXXfddaMxDY9ftGhRdO7ceaP9d+7c2RrciaWU4itf+Uocc8wx0bt374iwpmiaxx9/PPr37x+rVq2Kdu3axW9/+9s48MADiy+61hPb4pZbbolHH300Hn744Y3u83cU2+rII4+MG2+8MXr16hV1dXUxbty4OProo+PJJ5/codfTdsVHg0Kh0Oh2SmmjbbApTVk7G47Z1HhrcOc2atSomD17dvzlL3/Z6D5rim2x3377xaxZs2LJkiUxefLkGDZsWEyfPr14v/XE1nrxxRfjvPPOizvvvDPatGmz2XHWFFvrwx/+cPH/9+nTJ/r37x977713/Pd//3ccddRREbFjrqftOu1q9913j9atW29URi+//PJGJQZv1XC1hrdbO126dIk1a9bE66+//rZj6urqNtr/K6+8Yg3upM4999yYOnVq3HvvvbHnnnsWt1tTNEVZWVnss88+cdhhh8UVV1wRBx98cPzwhz+0nthmjzzySLz88svRr1+/KCkpiZKSkpg+fXr86Ec/ipKSkuKftzVFU1VUVESfPn3i73//+w79d9R2xUdZWVn069cvpk2b1mj7tGnT4uijj96uibFz69GjR3Tp0qXR2lmzZk1Mnz69uHb69esXpaWljcYsXLgwnnjiieKY/v37x9KlS2PmzJnFMQ899FAsXbrUGtzJpJRi1KhRceutt8Y999wTPXr0aHS/NUVzSCnF6tWrrSe22eDBg+Pxxx+PWbNmFb8OO+ywGDJkSMyaNSt69uxpTbFdVq9eHU899VR07dp1x/47ans/sd5wqd0bbrghzZkzJ51//vmpoqIizZs3b3t3zQ5u+fLl6bHHHkuPPfZYioh0zTXXpMcee6x4GeYrr7wyVVVVpVtvvTU9/vjj6XOf+9wmLxG35557prvuuis9+uij6YMf/OAmLxHXt2/fNGPGjDRjxozUp08flxzcCY0cOTJVVVWl++67r9FlB1euXFkcY02xLb71rW+l+++/P82dOzfNnj07XXTRRalVq1bpzjvvTClZT2y/t17tKiVrim3z1a9+Nd13333phRdeSA8++GA65ZRTUmVlZfFn7B11PW13fKSU0k9+8pNUW1ubysrK0qGHHlq89CXvbffee2+KiI2+hg0bllL612XiRo8enbp06ZLKy8vTsccemx5//PFG+3jzzTfTqFGjUseOHVPbtm3TKaeckhYsWNBozOLFi9OQIUNSZWVlqqysTEOGDEmvv/56pqMkl02tpYhIEydOLI6xptgWI0aMKL52derUKQ0ePLgYHilZT2y/DePDmmJbNPzejtLS0lRTU5M+8YlPpCeffLJ4/466ngoppfTOvKcCAADwf7brMx8AAABbS3wAAABZiA8AACAL8QEAAGQhPgAAgCzEBwAAkIX4AAAAshAfAABAFuID4D1ozJgxccghh7T0NJpk4MCBcf7557f0NABoAvEB8C4yfPjwKBQKUSgUorS0NHr27Blf+9rXYsWKFS09tbd13333RaFQiCVLlmz1Y5p6rLfeemtceuml2zljAFpCSUtPAIDGTjzxxJg4cWKsXbs2/vznP8eZZ54ZK1asiPHjxzcat3bt2igtLW2hWTaPrT3WiP873o4dO7bATAFoDt75AHiXKS8vjy5dukS3bt3i85//fAwZMiSmTJlSPFVqwoQJ0bNnzygvL4+UUixYsCA++tGPRrt27aJ9+/Zx2mmnRV1dXaN9XnnllVFdXR2VlZXxxS9+MVatWtXo/k2dyvSxj30shg8fXry9evXq+MY3vhHdunWL8vLy2HfffeOGG26IefPmxaBBgyIiYtddd41CodDocU051ojY7PFuONfNzavBnDlz4qSTTop27dpFdXV1DB06NF599dWtmh8AzUt8ALzLtW3bNtauXRsREc8991xMmjQpJk+eHLNmzYqIf0XCa6+9FtOnT49p06bF888/H5/5zGeKj580aVKMHj06Lrvssvjb3/4WXbt2jeuuu26b53HGGWfELbfcEj/60Y/iqaeeiuuvvz7atWsX3bp1i8mTJ0dExDPPPBMLFy6MH/7wh9t9rJs73q2dV0TEwoULY8CAAXHIIYfE3/72t/jjH/8YdXV1cdpppzVpfgBsH6ddAbyLzZw5M2666aYYPHhwRESsWbMmfvGLX0SnTp0iImLatGkxe/bsmDt3bnTr1i0iIn7xi1/EQQcdFA8//HAcfvjh8YMf/CBGjBgRZ555ZkREjBs3Lu66666N3v14O88++2xMmjQppk2bFscdd1xERPTs2bN4f8OpUJ07d44OHTo0y7Fu6ni3dV7jx4+PQw89NC6//PLitgkTJkS3bt3i2WefjV69ejVprgA0jXc+AN5lbrvttmjXrl20adMm+vfvH8cee2z8+Mc/joiI2traRj+IP/XUU9GtW7dieEREHHjggdGhQ4d46qmnimP69+/f6HtseHtLZs2aFa1bt44BAwY09bA26e2ONWLj493WeT3yyCNx7733Rrt27Ypf+++/f0REPP/88816LABsmXc+AN5lBg0aFOPHj4/S0tKoqalp9KHyioqKRmNTSlEoFDbax+a2b06rVq0ipdRo21tPf2rbtu1W72tbvN2xRmx8vBva0rzWr18fp556anz3u9/d6L6uXbtu+4QB2C7e+QB4l6moqIh99tknamtrt3g1qwMPPDAWLFgQL774YnHbnDlzYunSpXHAAQdERMQBBxwQDz74YKPHbXi7U6dOsXDhwuLt+vr6eOKJJ4q3+/TpE+vXr4/p06dvch5lZWXFx22LbTnWTdnSvA499NB48skno3v37rHPPvs0+tpS2ADQ/MQHwA7suOOOi759+8aQIUPi0UcfjZkzZ8YZZ5wRAwYMiMMOOywiIs4777yYMGFCTJgwIZ599tkYPXp0PPnkk43288EPfjBuv/32uP322+Ppp5+Os88+u9Hv7OjevXsMGzYsRowYEVOmTIm5c+fGfffdF5MmTYqIf50eVSgU4rbbbotXXnkl3njjjSzHv6V5nXPOOfHaa6/F5z73uZg5c2a88MILceedd8aIESO2OZQA2H7iA2AHVigUYsqUKbHrrrvGscceG8cdd1z07NkzfvWrXxXHfOYzn4nvfOc78c1vfjP69esX8+fPj5EjRzbaz4gRI2LYsGHFcOnRo0fx8rkNxo8fH5/61Kfi7LPPjv333z++9KUvFX8h4B577BFjx46NCy+8MKqrq2PUqFHv/MFvxbxqamrir3/9a9TX18cJJ5wQvXv3jvPOOy+qqqqiVSsvgQC5FdKGJ/kCAAC8A/yzDwAAkIX4AKDZLViwoNHlbTf8WrBgQUtPEYAW4LQrAJrdunXrYt68eZu9v3v37lFS4mrvAO814gMAAMjCaVcAAEAW4gMAAMhCfAAAAFmIDwAAIAvxAQAAZCE+AACALMQHAACQxf8Hr/9yDmiWWV4AAAAASUVORK5CYII=",
+      "text/plain": [
+       "<Figure size 1000x500 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "plt.figure(figsize=(10, 5))\n",
+    "sns.boxplot(x=df['Product_Price'])\n",
+    "plt.title(\"Boxplot of Product Prices\")\n",
+    "plt.show()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "cb45b202-1f6e-4e5e-ba5c-caa6092a7815",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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JGnXrl3Kzc3V0KFD/faLi4tTr169/LZ1795dR48e1e9//3u99957fi/5oWEjOKjQFVdcoZSUFKWkpGjgwIFasGCBBgwYoHHjxvluuz18+LC8Xq88Ho/fvq1bt1ZISIgOHz7st33kyJE6c+aMQkJCNHbs2HLPGxISopYtW/pt83q9vvOdz+HDh8u9K6xNmzYX3LcitXVcSbr++uuVlZWlLVu26PXXX1dCQoLGjBmjzz//3DempKREAwYM0Lvvvqtx48bp008/1Zdffun7OcupU6eqfX5JZT7X4eHhfsctvb7o6Ogy+5677b777tPixYuVk5OjO++8U61bt1aPHj20bt26XzRH1H0EB1WWnJysU6dOaffu3ZJ+/mZ16NChMr83kpeXp7Nnz+pXv/qVb9uJEyd03333KTExUY0aNdIDDzxQ7jnOnj1b5pt4bm6u73zn07JlSx08eLDM9gMHDkiS31yqoraOK0lRUVFKSUlRjx49dO+99yojI0OhoaFKS0vz3ZDw7bff6h//+Idmzpyp9PR09e3bV9dee22Fn4uaVHqec29kkP7/uvy3ESNGaNOmTcrPz9cHH3wg55xuu+023zMmNEwEB1W2fft2SfLd6dW/f38dP35cq1at8hv32muv+R4v9fDDD2vfvn1699139eqrr2r16tV6/vnnyz3PsmXL/D5+4403JFX8ezP9+/fXzp079fXXX5eZi8fjUb9+/SSV/S/4C6nscWvC5ZdfrnHjxumbb77RW2+9JUm+Z4+l8y61YMGCMvtX9doqIykpSV6vVytWrPDbvm/fPm3atOm8+zVp0kS33HKLJk2apNOnT2vHjh01NifUQYH9ERIuVqU3DSxZssR3p9OaNWvcyJEjnST3m9/8xje29C61yMhIN3v2bLdu3To3efJkFxoa6neX2qJFi3zHLDVmzBgXGhrq98P4iu5Su+WWW/zmeb671Lxer1u4cKH7+OOP3dixY53H43FpaWll9k1KSnIff/yxy8rKKveH7NU9blVuGihvbEFBgYuOjnZJSUnu7Nmz7vTp0+6yyy5z8fHx7o033nBr1651o0ePdomJiWVufli/fr2T5B566CG3adMml5WV5Y4dO+acO/9NAzNnziwzh3OP+993qX3wwQe+u9Ti4uJcu3btfOMeeOABl56e7t588023YcMG99Zbb7mrr77aRUVFuby8vEp9XlA/ERyUq7y71KKiotzVV1/tZs+eXeZW38OHD7uHH37YxcTEuJCQEBcfH+8mTJjgG5edne0aNWrkFwfnfr5FuVu3bi4hIcH99NNPzrmfg9OkSROXnZ3t+vbt6xo1auRatGjhRo0a5Y4fP+63/7nBce7nO6fuvvtu17JlSxcaGuqSkpLczJkzXXFxsd+4Tz75xHXt2tWFh4c7SWWOc67KHrcmguOccy+//LKT5JYuXeqcc27nzp3upptucpGRka558+bud7/7ndu3b1+5d9tNmDDBtWnTxgUFBTlJbv369c65XxYc55xbuHCh69ChgwsLC3OJiYlu8eLF7vbbb3ddu3b1jVm6dKnr16+fi46OdmFhYa5NmzZu6NChLjs7u1KfE9RfHueq+QebgFoyfPhwvf322zp+/Higp4ILOHr0qBITEzVkyBAtXLgw0NPBRY4/bQOgUnJzczV9+nT169dPLVu2VE5Ojp5//nkVFBTokUceCfT0UAcQHACVEh4err179yotLU1HjhxR48aN1bNnT82fP1+dO3cO9PRQB/CSGgDABLdFAwBMEBwAgAmCAwAwUe2bBkpKSnTgwAFFRkaW+RtaAICGwTmngoICtWnTRkFBFT+HqXZwDhw4oNjY2OruDgCoR/bv36+2bdtWOKbawYmMjPSdpFmzZtU9DACgDjt27JhiY2N9TahItYNT+jJas2bNCA4ANHCV+dEKNw0AAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgImQQE8AqCmHDh1Sfn5+oKdRb0VFRSk6OjrQ00AdRnBQLxw6dEj33ve/dOZ0UaCnUm8FBQVr7tyX1bFjx0BPBXUUwUG9kJ+frzOni3SqfR+VREQFejr1TnD+/1bE//la+/fvJzioNoKDeqUkIkolTX4V6GnUO0GnjgZ6CqgHuGkAAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4KDGFRYWavfu3SosLAz0VABUwPprleCgxu3bt09/+MMftG/fvkBPBUAFrL9WCQ4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMBESqBMXFxcrOztbR44cUYsWLZScnKzg4OBATQcAUMsCEpyNGzdq7ty5ys3N9W3zer1KS0tT7969AzElAEAtM39JbePGjZo8ebLat2+vl19+WR9++KFefvlltW/fXpMnT9bGjRutpwQAMGAanOLiYs2dO1epqamaNm2aOnfurMaNG6tz586aNm2aUlNTNW/ePBUXF1tOCwBgoNIvqRUVFamoqMj38bFjx6p8suzsbOXm5urpp59WUJB/64KCgnTPPfdo9OjRys7OVteuXat8fFxccnJy6uW5GrKDBw9q9+7dgZ4Gaoj1102lgzNjxgxNnTr1F53syJEjkqR27dqV+3jp9tJxqNumT58e6Cmghi1evFiLFy8O9DRQR1U6OBMmTNDjjz/u+/jYsWOKjY2t0slatGghSdqzZ486d+5c5vE9e/b4jUPdNmnSJMXHx5ucKycnh8AZGDlypHr27BnoaaCGWH/dVDo44eHhCg8P/0UnS05Oltfr1bJlyzRt2jS/l9VKSkq0bNkyxcTEKDk5+RedBxeH+Ph4JSYmBnoaqEExMTGsKarN9KaB4OBgpaWlafPmzXrqqae0Y8cOnTx5Ujt27NBTTz2lzZs3a9SoUfw+DgDUQ+a/h9O7d29NnTpVc+fO1ejRo33bY2JiNHXqVH4PBwDqqYD84mfv3r3Vq1cv/tIAADQgAfvTNsHBwdz6DAANCH+8EwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDiocXFxcVq4cKHi4uICPRUAFbD+Wg0xOQsalIiICCUmJgZ6GgAuwPprlWc4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATIYGeAFCTggrzAz2Feslz+nigp4B6gOCgXoiKilJoWLj0w4ZAT6XeCgoKVmxsbKCngTqM4KBeiI6O1v+8/pry83mGU1uioqIUHR0d6GmgDiM4qDeio6P5hghcxLhpAABgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJggOAAAEwQHAGCC4AAATBAcAIAJggMAMEFwAAAmCA4AwATBAQCYIDgAABMEBwBgguAAAEwQHACACYIDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBwAgImQ6u7onJMkHTt2rMYmAwCoW0obUNqEilQ7OAUFBZKk2NjY6h4CAFBPFBQUKCoqqsIxHleZLJWjpKREBw4cUGRkpDweT7UmeOzYMcXGxmr//v1q1qxZtY5RV3Ct9VNDudaGcp0S11pVzjkVFBSoTZs2Cgqq+Kc01X6GExQUpLZt21Z3dz/NmjWr9wtbimutnxrKtTaU65S41qq40DObUtw0AAAwQXAAACYCGpzw8HBNnjxZ4eHhgZyGCa61fmoo19pQrlPiWmtTtW8aAACgKnhJDQBgguAAAEwQHACACYIDADBRq8HZuHGjBg8erDZt2sjj8WjVqlUX3GfDhg3q1q2bIiIi1L59e82fP782p1hjqnqtmZmZ8ng8Zf7961//splwNc2YMUPXXnutIiMj1bp1aw0ZMkS7du264H51cV2rc611cV3nzZun5ORk3y//paam6qOPPqpwn7q4nlLVr7Uurmd5ZsyYIY/Ho0cffbTCcbW9rrUanBMnTqhLly6aM2dOpcbv2bNHt956q379619r27ZtmjhxosaOHat33nmnNqdZI6p6raV27dqlgwcP+v5dfvnltTTDmrFhwwaNHj1aW7Zs0bp163T27FkNGDBAJ06cOO8+dXVdq3OtperSurZt21Z//vOftXXrVm3dulU33HCDbr/9du3YsaPc8XV1PaWqX2upurSe58rKytLChQuVnJxc4TiTdXVGJLmVK1dWOGbcuHGuY8eOftseeugh17Nnz1qcWc2rzLWuX7/eSXI//fSTyZxqS15enpPkNmzYcN4x9WVdK3Ot9WVdmzdv7l555ZVyH6sv61mqomut6+tZUFDgLr/8crdu3TrXp08f98gjj5x3rMW6XlQ/w9m8ebMGDBjgt+3mm2/W1q1bdebMmQDNqnZ17dpVMTEx6t+/v9avXx/o6VRZfn6+JKlFixbnHVNf1rUy11qqrq5rcXGx3nzzTZ04cUKpqanljqkv61mZay1VV9dz9OjRGjRokG688cYLjrVY12r/8c7akJubq+joaL9t0dHROnv2rH788UfFxMQEaGY1LyYmRgsXLlS3bt1UVFSk119/Xf3791dmZqZ69+4d6OlVinNOjz/+uK6//npdeeWV5x1XH9a1stdaV9f1m2++UWpqqgoLC9W0aVOtXLlSnTp1KndsXV/PqlxrXV1PSXrzzTf19ddfKysrq1LjLdb1ogqOpDJvdeD+3x9CqO5bIFyskpKSlJSU5Ps4NTVV+/fv16xZsy76/yOXGjNmjLKzs/X5559fcGxdX9fKXmtdXdekpCRt375dR48e1TvvvKNhw4Zpw4YN5/1GXJfXsyrXWlfXc//+/XrkkUeUkZGhiIiISu9X2+t6Ub2k5vV6lZub67ctLy9PISEhatmyZYBmZadnz5767rvvAj2NSklPT9fq1au1fv36C75NRV1f16pca3nqwrqGhYWpQ4cOSklJ0YwZM9SlSxe98MIL5Y6t6+tZlWstT11Yz6+++kp5eXnq1q2bQkJCFBISog0bNujFF19USEiIiouLy+xjsa4X1TOc1NRUvf/++37bMjIylJKSotDQ0ADNys62bdsu+pcjnHNKT0/XypUrlZmZqXbt2l1wn7q6rtW51vLUhXU9l3NORUVF5T5WV9fzfCq61vLUhfXs37+/vvnmG79tI0aMUMeOHfXHP/5RwcHBZfYxWdcau/2gHAUFBW7btm1u27ZtTpKbPXu227Ztm8vJyXHOOTd+/Hh33333+cb/8MMPrnHjxu6xxx5zO3fudK+++qoLDQ11b7/9dm1Os0ZU9Vqff/55t3LlSrd792737bffuvHjxztJ7p133gnUJVTKqFGjXFRUlMvMzHQHDx70/Tt58qRvTH1Z1+pca11c1wkTJriNGze6PXv2uOzsbDdx4kQXFBTkMjIynHP1Zz2dq/q11sX1PJ9z71ILxLrWanBKbyk899+wYcOcc84NGzbM9enTx2+fzMxM17VrVxcWFuYSEhLcvHnzanOKNaaq1/rss8+6yy67zEVERLjmzZu766+/3n3wwQeBmXwVlHeNktySJUt8Y+rLulbnWuviuo4cOdLFx8e7sLAw16pVK9e/f3/fN2Dn6s96Olf1a62L63k+5wYnEOvK2xMAAExcVDcNAADqL4IDADBBcAAAJggOAMAEwQEAmCA4AAATBAcAYILgAABMEBzgF9q7d688Ho+2b98e6KkAFzWCgwZj+PDhvvekDwkJUVxcnEaNGqWffvqpSscYMmSI37bY2FgdPHiwwvfJAUBw0MAMHDhQBw8e1N69e/XKK6/o/fffV1pa2i86ZnBwsLxer0JCLqo/vg5cdAgOGpTw8HB5vV61bdtWAwYM0F133aWMjAxJP7/l8P3336927dqpUaNGSkpK8nuflClTpmjp0qV67733fM+UMjMzy7yklpmZKY/Ho08//VQpKSlq3LixrrvuOu3atctvLtOmTVPr1q0VGRmpBx54QOPHj9fVV19t9akAzBEcNFg//PCD1q5d63uvj5KSErVt21YrVqzQzp079cwzz2jixIlasWKFJOmJJ57Q0KFDfc+SDh48qOuuu+68x580aZKee+45bd26VSEhIRo5cqTvsWXLlmn69Ol69tln9dVXXykuLk7z5s2r3QsGAozXANCgrFmzRk2bNlVxcbEKCwslSbNnz5YkhYaGaurUqb6x7dq106ZNm7RixQoNHTpUTZs2VaNGjVRUVCSv13vBc02fPl19+vSRJI0fP16DBg1SYWGhIiIi9NJLL+n+++/XiBEjJEnPPPOMMjIydPz48Zq+ZOCiwTMcNCj9+vXT9u3b9cUXXyg9PV0333yz0tPTfY/Pnz9fKSkpatWqlZo2bapFixZp37591TpXcnKy73+XvkNkXl6eJGnXrl3q3r273/hzPwbqG4KDBqVJkybq0KGDkpOT9eKLL6qoqMj3rGbFihV67LHHNHLkSGVkZGj79u0aMWKETp8+Xa1z/ffb8no8Hkk/v2x37rZSvDUV6juCgwZt8uTJmjVrlg4cOKC//e1vuu6665SWlqauXbuqQ4cO+ve//+03PiwsTMXFxb/4vElJSfryyy/9tm3duvUXHxe4mBEcNGh9+/ZV586d9ac//UkdOnTQ1q1b9fHHH2v37t16+umnlZWV5Tc+ISFB2dnZ2rVrl3788UedOXOmWudNT0/Xq6++qqVLl+q7777TtGnTlJ2dXeZZD1CfEBw0eI8//rgWLVqkIUOG6I477tBdd92lHj166PDhw2V+R+fBBx9UUlKS7+c8f//736t1znvuuUcTJkzQE088oWuuuUZ79uzR8OHDFRERUROXBFyUPI4XjoGLwk033SSv16vXX3890FMBagW3RQMBcPLkSc2fP18333yzgoODtXz5cn3yySdat25doKcG1Bqe4QABcOrUKQ0ePFhff/21ioqKlJSUpKeeekp33HFHoKcG1BqCAwAwwU0DAAATBAcAYILgAABMEBwAgAmCAwAwQXAAACYIDgDABMEBAJj4v1Kn7Y7LG2pSAAAAAElFTkSuQmCC",
+      "text/plain": [
+       "<Figure size 500x500 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "plt.figure(figsize=(5, 5))\n",
+    "sns.boxplot(x=df['Rating'])\n",
+    "plt.title(\"Boxplot of Ratings\")\n",
+    "plt.show()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "ddd6e422-6895-4a0a-8ffb-08456ee85813",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Q1 = df['Product_Price'].quantile(0.25)\n",
+    "Q3 = df['Product_Price'].quantile(0.75)\n",
+    "IQR = Q3 - Q1\n",
+    "\n",
+    "# Define lower and upper bounds\n",
+    "lower_bound = Q1 - 1.5 * IQR\n",
+    "upper_bound = Q3 + 1.5 * IQR\n",
+    "\n",
+    "# Filter out extreme outliers\n",
+    "df = df[(df['Product_Price'] >= lower_bound) & (df['Product_Price'] <= upper_bound)]\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "d96109d4-ab2f-470e-bbe5-3399c9d2bc2b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = pd.get_dummies(df, columns=['Product_Category'], drop_first=True)  # One-hot encoding\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "3873b880-e96e-4384-9c07-5c48af1d301f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Order_ID</th>\n",
+       "      <th>Product_Price</th>\n",
+       "      <th>Customer_Age</th>\n",
+       "      <th>Rating</th>\n",
+       "      <th>Review_Text</th>\n",
+       "      <th>Order_Date</th>\n",
+       "      <th>Product_Category_Clothing</th>\n",
+       "      <th>Product_Category_Electronics</th>\n",
+       "      <th>Product_Category_Some Record</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>3262.0</td>\n",
+       "      <td>58.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>Would not recommend</td>\n",
+       "      <td>2023-01-01</td>\n",
+       "      <td>True</td>\n",
+       "      <td>False</td>\n",
+       "      <td>False</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>214.0</td>\n",
+       "      <td>20.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>Excellent product!</td>\n",
+       "      <td>2023-01-02</td>\n",
+       "      <td>True</td>\n",
+       "      <td>False</td>\n",
+       "      <td>False</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>3429.0</td>\n",
+       "      <td>51.0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>Value for money</td>\n",
+       "      <td>2023-01-03</td>\n",
+       "      <td>False</td>\n",
+       "      <td>False</td>\n",
+       "      <td>True</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5</td>\n",
+       "      <td>2237.0</td>\n",
+       "      <td>32.0</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>Not as expected</td>\n",
+       "      <td>2023-01-05</td>\n",
+       "      <td>False</td>\n",
+       "      <td>True</td>\n",
+       "      <td>False</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>6</td>\n",
+       "      <td>4952.0</td>\n",
+       "      <td>42.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>Last delivery</td>\n",
+       "      <td>2023-01-06</td>\n",
+       "      <td>False</td>\n",
+       "      <td>False</td>\n",
+       "      <td>False</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>55</th>\n",
+       "      <td>56</td>\n",
+       "      <td>330.0</td>\n",
+       "      <td>19.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>No review provided</td>\n",
+       "      <td>2023-02-25</td>\n",
+       "      <td>False</td>\n",
+       "      <td>True</td>\n",
+       "      <td>False</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    Order_ID  Product_Price  Customer_Age  Rating          Review_Text  \\\n",
+       "0          1         3262.0          58.0     3.0  Would not recommend   \n",
+       "1          2          214.0          20.0     3.0   Excellent product!   \n",
+       "2          3         3429.0          51.0     2.0      Value for money   \n",
+       "4          5         2237.0          32.0     4.0      Not as expected   \n",
+       "5          6         4952.0          42.0     1.0        Last delivery   \n",
+       "55        56          330.0          19.0     3.0   No review provided   \n",
+       "\n",
+       "    Order_Date  Product_Category_Clothing  Product_Category_Electronics  \\\n",
+       "0   2023-01-01                       True                         False   \n",
+       "1   2023-01-02                       True                         False   \n",
+       "2   2023-01-03                      False                         False   \n",
+       "4   2023-01-05                      False                          True   \n",
+       "5   2023-01-06                      False                         False   \n",
+       "55  2023-02-25                      False                          True   \n",
+       "\n",
+       "    Product_Category_Some Record  \n",
+       "0                          False  \n",
+       "1                          False  \n",
+       "2                           True  \n",
+       "4                          False  \n",
+       "5                          False  \n",
+       "55                         False  "
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "22f36f14-7039-44be-92c9-0c82b2ac0056",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Cleaned dataset saved successfully!\n"
+     ]
+    }
+   ],
+   "source": [
+    "df.to_csv(\"cleaned_ecommerce_reviews.csv\", index=False)\n",
+    "print(\"Cleaned dataset saved successfully!\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4425b5de-b021-4618-add4-c797fd6e7ccd",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:base] *",
+   "language": "python",
+   "name": "conda-base-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
